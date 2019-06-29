@@ -63,9 +63,9 @@ object Utils {
         .replace(" ", divider)
         .map {
             if (it.isLowerCase()) {
-                translitMap.getOrElse(it.toString(), { it })
+                translitMap.getOrElse(it.toString(), { it.toString() })
             } else {
-                translitMap.getOrElse(it.toString().toLowerCase(), { it }).toString().toUpperCase()
+                translitMap.getOrElse(it.toString().toLowerCase(), { it.toString() }).toUpperCase()
             }
         }
         .joinToString("")
