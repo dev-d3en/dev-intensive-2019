@@ -65,7 +65,8 @@ object Utils {
             if (it.isLowerCase()) {
                 translitMap.getOrElse(it.toString(), { it.toString() })
             } else {
-                translitMap.getOrElse(it.toString().toLowerCase(), { it.toString() }).toUpperCase()
+                val replaced = translitMap.getOrElse(it.toString().toLowerCase(), { it.toString() })
+                replaced[0].toString().toUpperCase().plus(replaced.substring(1))
             }
         }
         .joinToString("")
