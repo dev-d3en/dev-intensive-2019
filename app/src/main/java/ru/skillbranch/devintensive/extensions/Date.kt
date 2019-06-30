@@ -3,6 +3,7 @@ package ru.skillbranch.devintensive.extensions
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.round
 
 const val SECOND = 1000L
 const val MINUTE = 60 * SECOND
@@ -33,11 +34,11 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     val diffTime = abs(this.time - date.time)
 
     val result = when {
-        diffTime <= 1.01 * SECOND -> "только что"
+        diffTime <= 1.07 * SECOND -> "только что"
         diffTime <= 45 * SECOND -> if (isBeforeNow) "несколько секунд назад" else "через несколько секунд"
         diffTime <= 75 * SECOND -> "минуту назад"
         diffTime <= 45 * MINUTE -> {
-            val minute = diffTime / MINUTE
+            val minute = round(diffTime.toDouble() / MINUTE).toLong()
             when (getSuffix(minute)) {
                 NumberSuffix.ONE -> if (isBeforeNow) "${minute} минуту назад" else "через ${minute} минуту"
                 NumberSuffix.PAIR -> if (isBeforeNow) "${minute} минуты назад" else "через ${minute} минуты"
@@ -46,7 +47,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         }
         diffTime <= 75 * MINUTE -> "час назад"
         diffTime <= 22 * HOUR -> {
-            val hours = diffTime / HOUR
+            val hours = round(diffTime.toDouble() / HOUR).toLong()
             when (getSuffix(hours)) {
                 NumberSuffix.ONE -> if (isBeforeNow) "${hours} час назад" else "через ${hours} час"
                 NumberSuffix.PAIR -> if (isBeforeNow) "${hours} часа назад" else "через ${hours} часа"
@@ -55,7 +56,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         }
         diffTime <= 26 * HOUR -> "день назад"
         diffTime <= 360 * DAY -> {
-            val days = diffTime / DAY
+            val days = round(diffTime.toDouble() / DAY).toLong()
             when (getSuffix(days)) {
                 NumberSuffix.ONE -> if (isBeforeNow) "${days} день назад" else "через ${days} день"
                 NumberSuffix.PAIR -> if (isBeforeNow) "${days} дня назад" else "через ${days} дня"
