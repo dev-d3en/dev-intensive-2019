@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 const val SECOND = 1000L
 const val MINUTE = 60 * SECOND
@@ -27,6 +28,65 @@ fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND): Date {
     return this
 }
 
+fun Date.humanizeDiff(date: Date = Date()): String {
+    val isBeforeNow = this.before(date)
+    val diffTime = abs(this.time - date.time)
+
+    val result = when {
+        diffTime <= 1.01 * SECOND -> "только что"
+        diffTime <= 45 * SECOND -> if (isBeforeNow) "несколько секунд назад" else "через несколько секунд"
+        diffTime <= 75 * SECOND -> "минуту назад"
+        diffTime <= 45 * MINUTE -> {
+            val minute = diffTime / MINUTE
+            when (getSuffix(minute)) {
+                NumgerSuffix.ONE -> if (isBeforeNow) "${minute} минуту назад" else "через ${minute} минуту"
+                NumgerSuffix.PAIR -> if (isBeforeNow) "${minute} минуты назад" else "через ${minute} минуты"
+                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${minute} минут назад" else "через ${minute} минут"
+            }
+        }
+        diffTime <= 75 * MINUTE -> "час назад"
+        diffTime <= 22 * HOUR -> {
+            val hours = diffTime / HOUR
+            when (getSuffix(hours)) {
+                NumgerSuffix.ONE -> if (isBeforeNow) "${hours} час назад" else "через ${hours} час"
+                NumgerSuffix.PAIR -> if (isBeforeNow) "${hours} часа назад" else "через ${hours} часа"
+                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${hours} часов назад" else "через ${hours} часов"
+            }
+        }
+        diffTime <= 26 * HOUR -> "день назад"
+        diffTime <= 360 * DAY -> {
+            val days = diffTime / DAY
+            when (getSuffix(days)) {
+                NumgerSuffix.ONE -> if (isBeforeNow) "${days} день назад" else "через ${days} день"
+                NumgerSuffix.PAIR -> if (isBeforeNow) "${days} дня назад" else "через ${days} дня"
+                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${days} дней назад" else "через ${days} дней"
+            }
+        }
+        else -> if (isBeforeNow) "более года назад" else "более чем через год"
+    }
+
+    return result
+}
+
+private fun getSuffix(number: Long): NumgerSuffix{
+    val num = abs(number)
+    return when {
+        num % 10 == 1L && num / 10 != 1L -> NumgerSuffix.ONE
+        num % 10 > 0 && num % 10 < 5 && num / 10 != 1L -> NumgerSuffix.PAIR
+        else -> NumgerSuffix.SEVERAL
+    }
+}
+
+enum class NumgerSuffix {
+    ONE, PAIR, SEVERAL
+}
+
 enum class TimeUnits {
     SECOND, MINUTE, HOUR, DAY
+}
+
+fun main() {
+    for (i in 0L .. 30) {
+        println("$i ${getSuffix(i)}")
+    }
 }
