@@ -36,7 +36,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     val result = when {
         diffTime <= 1.07 * SECOND -> "только что"
         diffTime <= 45 * SECOND -> if (isBeforeNow) "несколько секунд назад" else "через несколько секунд"
-        diffTime <= 75 * SECOND -> "минуту назад"
+        diffTime <= 75 * SECOND -> if (isBeforeNow) "минуту назад" else "через минуту"
         diffTime <= 45 * MINUTE -> {
             val minute = round(diffTime.toDouble() / MINUTE).toLong()
             when (getSuffix(minute)) {
@@ -45,7 +45,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
                 NumberSuffix.SEVERAL -> if (isBeforeNow) "${minute} минут назад" else "через ${minute} минут"
             }
         }
-        diffTime <= 75 * MINUTE -> "час назад"
+        diffTime <= 75 * MINUTE -> if (isBeforeNow) "час назад" else "через час"
         diffTime <= 22 * HOUR -> {
             val hours = round(diffTime.toDouble() / HOUR).toLong()
             when (getSuffix(hours)) {
@@ -54,7 +54,7 @@ fun Date.humanizeDiff(date: Date = Date()): String {
                 NumberSuffix.SEVERAL -> if (isBeforeNow) "${hours} часов назад" else "через ${hours} часов"
             }
         }
-        diffTime <= 26 * HOUR -> "день назад"
+        diffTime <= 26 * HOUR -> if (isBeforeNow) "день назад" else "через день"
         diffTime <= 360 * DAY -> {
             val days = round(diffTime.toDouble() / DAY).toLong()
             when (getSuffix(days)) {
