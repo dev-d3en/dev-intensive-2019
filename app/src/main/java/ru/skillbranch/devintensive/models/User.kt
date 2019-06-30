@@ -20,7 +20,12 @@ data class User(
         avatar = null
     )
 
-    constructor(id: String) : this (id, "Name_$id", "Lastname_$id")
+    constructor(id: String) : this(id, "John", "Doe")
+
+    init {
+        println("It`s Alive!!!\n" +
+                "${if (lastName=="Doe") "His name is $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n")
+    }
 
     companion object Factory {
         private var lastId = -1
