@@ -39,27 +39,27 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         diffTime <= 45 * MINUTE -> {
             val minute = diffTime / MINUTE
             when (getSuffix(minute)) {
-                NumgerSuffix.ONE -> if (isBeforeNow) "${minute} минуту назад" else "через ${minute} минуту"
-                NumgerSuffix.PAIR -> if (isBeforeNow) "${minute} минуты назад" else "через ${minute} минуты"
-                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${minute} минут назад" else "через ${minute} минут"
+                NumberSuffix.ONE -> if (isBeforeNow) "${minute} минуту назад" else "через ${minute} минуту"
+                NumberSuffix.PAIR -> if (isBeforeNow) "${minute} минуты назад" else "через ${minute} минуты"
+                NumberSuffix.SEVERAL -> if (isBeforeNow) "${minute} минут назад" else "через ${minute} минут"
             }
         }
         diffTime <= 75 * MINUTE -> "час назад"
         diffTime <= 22 * HOUR -> {
             val hours = diffTime / HOUR
             when (getSuffix(hours)) {
-                NumgerSuffix.ONE -> if (isBeforeNow) "${hours} час назад" else "через ${hours} час"
-                NumgerSuffix.PAIR -> if (isBeforeNow) "${hours} часа назад" else "через ${hours} часа"
-                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${hours} часов назад" else "через ${hours} часов"
+                NumberSuffix.ONE -> if (isBeforeNow) "${hours} час назад" else "через ${hours} час"
+                NumberSuffix.PAIR -> if (isBeforeNow) "${hours} часа назад" else "через ${hours} часа"
+                NumberSuffix.SEVERAL -> if (isBeforeNow) "${hours} часов назад" else "через ${hours} часов"
             }
         }
         diffTime <= 26 * HOUR -> "день назад"
         diffTime <= 360 * DAY -> {
             val days = diffTime / DAY
             when (getSuffix(days)) {
-                NumgerSuffix.ONE -> if (isBeforeNow) "${days} день назад" else "через ${days} день"
-                NumgerSuffix.PAIR -> if (isBeforeNow) "${days} дня назад" else "через ${days} дня"
-                NumgerSuffix.SEVERAL -> if (isBeforeNow) "${days} дней назад" else "через ${days} дней"
+                NumberSuffix.ONE -> if (isBeforeNow) "${days} день назад" else "через ${days} день"
+                NumberSuffix.PAIR -> if (isBeforeNow) "${days} дня назад" else "через ${days} дня"
+                NumberSuffix.SEVERAL -> if (isBeforeNow) "${days} дней назад" else "через ${days} дней"
             }
         }
         else -> if (isBeforeNow) "более года назад" else "более чем через год"
@@ -68,16 +68,16 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     return result
 }
 
-private fun getSuffix(number: Long): NumgerSuffix{
+private fun getSuffix(number: Long): NumberSuffix{
     val num = abs(number)
     return when {
-        num % 10 == 1L && num / 10 != 1L -> NumgerSuffix.ONE
-        num % 10 > 0 && num % 10 < 5 && num / 10 != 1L -> NumgerSuffix.PAIR
-        else -> NumgerSuffix.SEVERAL
+        num % 10 == 1L && num / 10 != 1L -> NumberSuffix.ONE
+        num % 10 > 0 && num % 10 < 5 && num / 10 != 1L -> NumberSuffix.PAIR
+        else -> NumberSuffix.SEVERAL
     }
 }
 
-enum class NumgerSuffix {
+enum class NumberSuffix {
     ONE, PAIR, SEVERAL
 }
 
