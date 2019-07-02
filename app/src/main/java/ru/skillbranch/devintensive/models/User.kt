@@ -50,7 +50,8 @@ data class User(
 
         fun build(): User {
             lastId++
-            return User("${Factory.lastId}", firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
+            return User("${if (id.isNullOrBlank()) Factory.lastId else id}",
+                firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
         }
     }
 
