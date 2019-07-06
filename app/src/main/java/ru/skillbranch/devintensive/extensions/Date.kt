@@ -40,19 +40,19 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         diffTime <= 45 * MINUTE -> {
             val minute = round(diffTime.toDouble() / MINUTE).toInt()
             val plurals = TimeUnits.MINUTE.plural(minute)
-            if (isBeforeNow) "$minute $plurals назад" else "через $minute $plurals"
+            if (isBeforeNow) "$plurals назад" else "через $plurals"
         }
         diffTime <= 75 * MINUTE -> if (isBeforeNow) "час назад" else "через час"
         diffTime <= 22 * HOUR -> {
             val hours = round(diffTime.toDouble() / HOUR).toInt()
             val plurals = TimeUnits.HOUR.plural(hours)
-            if (isBeforeNow) "$hours $plurals назад" else "через $hours $plurals"
+            if (isBeforeNow) "$plurals назад" else "через $plurals"
         }
         diffTime <= 26 * HOUR -> if (isBeforeNow) "день назад" else "через день"
         diffTime <= 360 * DAY -> {
             val days = round(diffTime.toDouble() / DAY).toInt()
             val plurals = TimeUnits.DAY.plural(days)
-            if (isBeforeNow) "$days $plurals назад" else "через $days $plurals"
+            if (isBeforeNow) "$plurals назад" else "через $plurals"
         }
         else -> if (isBeforeNow) "более года назад" else "более чем через год"
     }
@@ -67,26 +67,26 @@ enum class TimeUnits {
         return when {
             value % 10 == 1 && value / 10 != 1 -> {
                 when (this) {
-                    SECOND -> "секунду"
-                    MINUTE -> "минуту"
-                    HOUR -> "час"
-                    DAY -> "день"
+                    SECOND -> "$value секунду"
+                    MINUTE -> "$value минуту"
+                    HOUR -> "$value час"
+                    DAY -> "$value день"
                 }
             }
             value % 10 > 0 && value % 10 < 5 && value / 10 != 1 -> {
                 when (this) {
-                    SECOND -> "секунды"
-                    MINUTE -> "минуты"
-                    HOUR -> "часа"
-                    DAY -> "дня"
+                    SECOND -> "$value секунды"
+                    MINUTE -> "$value минуты"
+                    HOUR -> "$value часа"
+                    DAY -> "$value дня"
                 }
             }
             else -> {
                 when (this) {
-                    SECOND -> "секунд"
-                    MINUTE -> "минут"
-                    HOUR -> "часов"
-                    DAY -> "дней"
+                    SECOND -> "$value секунд"
+                    MINUTE -> "$value минут"
+                    HOUR -> "$value часов"
+                    DAY -> "$value дней"
                 }
             }
         }
