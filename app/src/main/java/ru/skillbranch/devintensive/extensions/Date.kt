@@ -38,30 +38,21 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         diffTime <= 45 * SECOND -> if (isBeforeNow) "несколько секунд назад" else "через несколько секунд"
         diffTime <= 75 * SECOND -> if (isBeforeNow) "минуту назад" else "через минуту"
         diffTime <= 45 * MINUTE -> {
-            val minute = round(diffTime.toDouble() / MINUTE).toLong()
-            when (getSuffix(minute)) {
-                NumberSuffix.ONE -> if (isBeforeNow) "${minute} минуту назад" else "через ${minute} минуту"
-                NumberSuffix.PAIR -> if (isBeforeNow) "${minute} минуты назад" else "через ${minute} минуты"
-                NumberSuffix.SEVERAL -> if (isBeforeNow) "${minute} минут назад" else "через ${minute} минут"
-            }
+            val minute = round(diffTime.toDouble() / MINUTE).toInt()
+            val plurals = TimeUnits.MINUTE.plural(minute)
+            if (isBeforeNow) "$minute $plurals назад" else "через $minute $plurals"
         }
         diffTime <= 75 * MINUTE -> if (isBeforeNow) "час назад" else "через час"
         diffTime <= 22 * HOUR -> {
-            val hours = round(diffTime.toDouble() / HOUR).toLong()
-            when (getSuffix(hours)) {
-                NumberSuffix.ONE -> if (isBeforeNow) "${hours} час назад" else "через ${hours} час"
-                NumberSuffix.PAIR -> if (isBeforeNow) "${hours} часа назад" else "через ${hours} часа"
-                NumberSuffix.SEVERAL -> if (isBeforeNow) "${hours} часов назад" else "через ${hours} часов"
-            }
+            val hours = round(diffTime.toDouble() / HOUR).toInt()
+            val plurals = TimeUnits.HOUR.plural(hours)
+            if (isBeforeNow) "$hours $plurals назад" else "через $hours $plurals"
         }
         diffTime <= 26 * HOUR -> if (isBeforeNow) "день назад" else "через день"
         diffTime <= 360 * DAY -> {
-            val days = round(diffTime.toDouble() / DAY).toLong()
-            when (getSuffix(days)) {
-                NumberSuffix.ONE -> if (isBeforeNow) "${days} день назад" else "через ${days} день"
-                NumberSuffix.PAIR -> if (isBeforeNow) "${days} дня назад" else "через ${days} дня"
-                NumberSuffix.SEVERAL -> if (isBeforeNow) "${days} дней назад" else "через ${days} дней"
-            }
+            val days = round(diffTime.toDouble() / DAY).toInt()
+            val plurals = TimeUnits.DAY.plural(days)
+            if (isBeforeNow) "$days $plurals назад" else "через $days $plurals"
         }
         else -> if (isBeforeNow) "более года назад" else "более чем через год"
     }
@@ -69,25 +60,35 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     return result
 }
 
-private fun getSuffix(number: Long): NumberSuffix{
-    val num = abs(number)
-    return when {
-        num % 10 == 1L && num / 10 != 1L -> NumberSuffix.ONE
-        num % 10 > 0 && num % 10 < 5 && num / 10 != 1L -> NumberSuffix.PAIR
-        else -> NumberSuffix.SEVERAL
-    }
-}
-
-enum class NumberSuffix {
-    ONE, PAIR, SEVERAL
-}
-
 enum class TimeUnits {
-    SECOND, MINUTE, HOUR, DAY
-}
+    SECOND, MINUTE, HOUR, DAY;
 
-fun main() {
-    for (i in 0L .. 30) {
-        println("$i ${getSuffix(i)}")
+    fun plural(value: Int): String {
+        return when {
+            value % 10 == 1 && value / 10 != 1 -> {
+                when (this) {
+                    SECOND -> "секунду"
+                    MINUTE -> "минуту"
+                    HOUR -> "час"
+                    DAY -> "день"
+                }
+            }
+            value % 10 > 0 && value % 10 < 5 && value / 10 != 1 -> {
+                when (this) {
+                    SECOND -> "секунды"
+                    MINUTE -> "минуты"
+                    HOUR -> "часа"
+                    DAY -> "дня"
+                }
+            }
+            else -> {
+                when (this) {
+                    SECOND -> "секунд"
+                    MINUTE -> "минут"
+                    HOUR -> "часов"
+                    DAY -> "дней"
+                }
+            }
+        }
     }
 }
