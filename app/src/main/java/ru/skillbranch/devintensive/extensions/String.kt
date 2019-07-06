@@ -11,3 +11,5 @@ fun String.truncate(count: Int = 16):String {
         }
     } else trimmed
 }
+
+fun String.stripHtml() = this.replace(Regex("<[^<]*?>|&#\\d+;"), "").replace(Regex("[^\\S\\r\\n]+"), " ")
